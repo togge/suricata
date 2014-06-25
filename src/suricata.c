@@ -1548,6 +1548,30 @@ static TmEcode ParseCommandLine(int argc, char** argv, SCInstance *suri)
                 return TM_ECODE_FAILED;
             }
 
+            /* warn user if af-packet, netmap or pf-ring are available */
+#if defined HAVE_AF_PACKET || HAVE_PFRING || HAVE_NETMAP
+            SCLogWarning(SC_WARN_FASTER_CAPTURE_AVAILABLE, "faster capture "
+                "options are available: "
+#ifdef HAVE_AF_PACKET
+                "AF_PACKET (--af-packet=%s) "
+#endif
+#ifdef HAVE_PFRING
+                "PF_RING (--pfring-int=%s)"
+#endif
+#ifdef HAVE_NETMAP
+                "NETMAP (--netmap=%s)"
+#endif
+#ifdef HAVE_AF_PACKET
+                , optarg
+#endif
+#ifdef HAVE_PFRING
+                , optarg
+#endif
+#ifdef HAVE_NETMAP
+                , optarg
+#endif
+                );
+#endif
             /* some windows shells require escaping of the \ in \Device. Otherwise
              * the backslashes are stripped. We put them back here. */
             if (strlen(optarg) > 9 && strncmp(optarg, "DeviceNPF", 9) == 0) {
