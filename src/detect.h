@@ -174,7 +174,7 @@ typedef struct DetectAddress_ {
     Address ip2;
 
     /** signatures that belong in this group */
-    struct SigGroupHead_ *sh;
+//    struct SigGroupHead_ *sh;
 
     /** flags affecting this address */
     uint8_t flags;

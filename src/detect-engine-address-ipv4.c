@@ -157,12 +157,12 @@ int DetectAddressCutIPv4(DetectEngineCtx *de_ctx, DetectAddress *a,
         tmp_c->ip.addr_data32[0] = htonl(a_ip2 + 1);
         tmp_c->ip2.addr_data32[0] = htonl(b_ip2);
         *c = tmp_c;
-
+#if 0
         if (de_ctx != NULL) {
             SigGroupHeadCopySigs(de_ctx, b->sh, &tmp_c->sh);
             SigGroupHeadCopySigs(de_ctx, a->sh, &b->sh);
         }
-
+#endif
     /* we have 3 parts: [bbb[baba]aaa]
      * part a: b_ip1 <-> a_ip1 - 1
      * part b: a_ip1 <-> b_ip2
@@ -185,7 +185,7 @@ int DetectAddressCutIPv4(DetectEngineCtx *de_ctx, DetectAddress *a,
         tmp_c->ip.addr_data32[0]  = htonl(b_ip2 + 1);
         tmp_c->ip2.addr_data32[0] = htonl(a_ip2);
         *c = tmp_c;
-
+#if 0
         if (de_ctx != NULL) {
             /* 'a' gets clean and then 'b' sigs
              * 'b' gets clean, then 'a' then 'b' sigs
@@ -203,7 +203,7 @@ int DetectAddressCutIPv4(DetectEngineCtx *de_ctx, DetectAddress *a,
             /* clean tmp list */
             SigGroupHeadClearSigs(tmp->sh);
         }
-
+#endif
         /* we have 2 or three parts:
          *
          * 2 part: [[abab]bbb] or [bbb[baba]]
@@ -231,11 +231,12 @@ int DetectAddressCutIPv4(DetectEngineCtx *de_ctx, DetectAddress *a,
 
             b->ip.addr_data32[0] = htonl(a_ip2 + 1);
             b->ip2.addr_data32[0] = htonl(b_ip2);
-
+#if 0
             if (de_ctx != NULL) {
                 /* 'b' overlaps 'a' so 'a' needs the 'b' sigs */
                 SigGroupHeadCopySigs(de_ctx, b->sh, &a->sh);
             }
+#endif
         } else if (a_ip2 == b_ip2) {
             SCLogDebug("DetectAddressCutIPv4: 2");
 
@@ -244,7 +245,7 @@ int DetectAddressCutIPv4(DetectEngineCtx *de_ctx, DetectAddress *a,
 
             b->ip.addr_data32[0]   = htonl(a_ip1);
             b->ip2.addr_data32[0] = htonl(a_ip2);
-
+#if 0
             if (de_ctx != NULL) {
                 SigGroupHeadCopySigs(de_ctx, b->sh, &tmp->sh);
                 SigGroupHeadCopySigs(de_ctx, a->sh, &b->sh);
@@ -252,6 +253,7 @@ int DetectAddressCutIPv4(DetectEngineCtx *de_ctx, DetectAddress *a,
                 SigGroupHeadCopySigs(de_ctx, tmp->sh, &a->sh);
                 SigGroupHeadClearSigs(tmp->sh);
             }
+#endif
         } else {
             SCLogDebug("3");
 
@@ -269,7 +271,7 @@ int DetectAddressCutIPv4(DetectEngineCtx *de_ctx, DetectAddress *a,
             tmp_c->ip.addr_data32[0] = htonl(a_ip2 + 1);
             tmp_c->ip2.addr_data32[0] = htonl(b_ip2);
             *c = tmp_c;
-
+#if 0
             if (de_ctx != NULL) {
                 /* 'a' gets clean and then 'b' sigs
                  * 'b' gets clean, then 'a' then 'b' sigs
@@ -287,6 +289,7 @@ int DetectAddressCutIPv4(DetectEngineCtx *de_ctx, DetectAddress *a,
                 /* clean tmp list */
                 SigGroupHeadClearSigs(tmp->sh);
             }
+#endif
         }
         /* we have 2 or three parts:
          *
@@ -315,7 +318,7 @@ int DetectAddressCutIPv4(DetectEngineCtx *de_ctx, DetectAddress *a,
 
             b->ip.addr_data32[0] = htonl(b_ip2 + 1);
             b->ip2.addr_data32[0] = htonl(a_ip2);
-
+#if 0
             if (de_ctx != NULL) {
                 /* 'b' overlaps 'a' so a needs the 'b' sigs */
                 SigGroupHeadCopySigs(de_ctx, b->sh, &tmp->sh);
@@ -324,6 +327,7 @@ int DetectAddressCutIPv4(DetectEngineCtx *de_ctx, DetectAddress *a,
                 SigGroupHeadCopySigs(de_ctx, tmp->sh, &a->sh);
                 SigGroupHeadClearSigs(tmp->sh);
             }
+#endif
         } else if (a_ip2 == b_ip2) {
             SCLogDebug("DetectAddressCutIPv4: 2");
 
@@ -332,11 +336,12 @@ int DetectAddressCutIPv4(DetectEngineCtx *de_ctx, DetectAddress *a,
 
             b->ip.addr_data32[0]   = htonl(b_ip1);
             b->ip2.addr_data32[0] = htonl(b_ip2);
-
+#if 0
             if (de_ctx != NULL) {
                 /* 'a' overlaps 'b' so a needs the 'a' sigs */
                 SigGroupHeadCopySigs(de_ctx, a->sh, &b->sh);
             }
+#endif
         } else {
             SCLogDebug("DetectAddressCutIPv4: 3");
 
@@ -354,7 +359,7 @@ int DetectAddressCutIPv4(DetectEngineCtx *de_ctx, DetectAddress *a,
             tmp_c->ip.addr_data32[0] = htonl(b_ip2 + 1);
             tmp_c->ip2.addr_data32[0] = htonl(a_ip2);
             *c = tmp_c;
-
+#if 0
             if (de_ctx != NULL) {
                 /* 'a' stays the same wrt sigs
                  * 'b' keeps it's own sigs and gets a's sigs prepended
@@ -362,6 +367,7 @@ int DetectAddressCutIPv4(DetectEngineCtx *de_ctx, DetectAddress *a,
                 SigGroupHeadCopySigs(de_ctx, a->sh, &b->sh);
                 SigGroupHeadCopySigs(de_ctx, a->sh, &tmp_c->sh);
             }
+#endif
         }
     }
 

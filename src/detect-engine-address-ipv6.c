@@ -405,12 +405,12 @@ int DetectAddressCutIPv6(DetectEngineCtx *de_ctx, DetectAddress *a,
         AddressCutIPv6Copy(b_ip2, tmp_c->ip2.addr_data32);
 
         *c = tmp_c;
-
+#if 0
         /* copy old b to c */
         SigGroupHeadCopySigs(de_ctx, b->sh, &tmp_c->sh);
         /* copy old b to a */
         SigGroupHeadCopySigs(de_ctx, a->sh, &b->sh);
-
+#endif
     /* we have 3 parts: [bbb[baba]aaa]
      * part a: b_ip1 <-> a_ip1 - 1
      * part b: a_ip1 <-> b_ip2
@@ -432,7 +432,7 @@ int DetectAddressCutIPv6(DetectEngineCtx *de_ctx, DetectAddress *a,
         AddressCutIPv6CopyAddOne(b_ip2, tmp_c->ip.addr_data32);
         AddressCutIPv6Copy(a_ip2, tmp_c->ip2.addr_data32);
         *c = tmp_c;
-
+#if 0
         /* 'a' gets clean and then 'b' sigs
          * 'b' gets clean, then 'a' then 'b' sigs
          * 'c' gets 'a' sigs */
@@ -449,7 +449,7 @@ int DetectAddressCutIPv6(DetectEngineCtx *de_ctx, DetectAddress *a,
 
         /* clean tmp list */
         SigGroupHeadClearSigs(tmp->sh);
-
+#endif
     /* we have 2 or three parts:
      *
      * 2 part: [[abab]bbb] or [bbb[baba]]
@@ -471,23 +471,23 @@ int DetectAddressCutIPv6(DetectEngineCtx *de_ctx, DetectAddress *a,
 
             AddressCutIPv6CopyAddOne(a_ip2, b->ip.addr_data32);
             AddressCutIPv6Copy(b_ip2, b->ip2.addr_data32);
-
+#if 0
             /* 'b' overlaps 'a' so 'a' needs the 'b' sigs */
             SigGroupHeadCopySigs(de_ctx, b->sh, &a->sh);
-
+#endif
         } else if (AddressIPv6EqU32(a_ip2, b_ip2) == 1) {
             AddressCutIPv6Copy(b_ip1, a->ip.addr_data32);
             AddressCutIPv6CopySubOne(a_ip1, a->ip2.addr_data32);
 
             AddressCutIPv6Copy(a_ip1, b->ip.addr_data32);
             AddressCutIPv6Copy(a_ip2, b->ip2.addr_data32);
-
+#if 0
             SigGroupHeadCopySigs(de_ctx, b->sh, &tmp->sh);
             SigGroupHeadCopySigs(de_ctx, a->sh, &b->sh);
             SigGroupHeadClearSigs(a->sh);
             SigGroupHeadCopySigs(de_ctx, tmp->sh, &a->sh);
             SigGroupHeadClearSigs(tmp->sh);
-
+#endif
         } else {
             AddressCutIPv6Copy(b_ip1, a->ip.addr_data32);
             AddressCutIPv6CopySubOne(a_ip1, a->ip2.addr_data32);
@@ -504,7 +504,7 @@ int DetectAddressCutIPv6(DetectEngineCtx *de_ctx, DetectAddress *a,
             AddressCutIPv6CopyAddOne(a_ip2, tmp_c->ip.addr_data32);
             AddressCutIPv6Copy(b_ip2, tmp_c->ip2.addr_data32);
             *c = tmp_c;
-
+#if 0
             /* 'a' gets clean and then 'b' sigs
              * 'b' gets clean, then 'a' then 'b' sigs
              * 'c' gets 'b' sigs */
@@ -521,7 +521,7 @@ int DetectAddressCutIPv6(DetectEngineCtx *de_ctx, DetectAddress *a,
 
             /* clean tmp list */
             SigGroupHeadClearSigs(tmp->sh);
-
+#endif
         }
     /* we have 2 or three parts:
      *
@@ -544,24 +544,24 @@ int DetectAddressCutIPv6(DetectEngineCtx *de_ctx, DetectAddress *a,
 
             AddressCutIPv6CopyAddOne(b_ip2, b->ip.addr_data32);
             AddressCutIPv6Copy(a_ip2, b->ip2.addr_data32);
-
+#if 0
             /* 'b' overlaps 'a' so a needs the 'b' sigs */
             SigGroupHeadCopySigs(de_ctx, b->sh, &tmp->sh);
             SigGroupHeadClearSigs(b->sh);
             SigGroupHeadCopySigs(de_ctx, a->sh, &b->sh);
             SigGroupHeadCopySigs(de_ctx, tmp->sh, &a->sh);
             SigGroupHeadClearSigs(tmp->sh);
-
+#endif
         } else if (AddressIPv6EqU32(a_ip2, b_ip2) == 1) {
             AddressCutIPv6Copy(a_ip1, a->ip.addr_data32);
             AddressCutIPv6CopySubOne(b_ip1, a->ip2.addr_data32);
 
             AddressCutIPv6Copy(b_ip1, b->ip.addr_data32);
             AddressCutIPv6Copy(b_ip2, b->ip2.addr_data32);
-
+#if 0
             /* 'a' overlaps 'b' so a needs the 'a' sigs */
             SigGroupHeadCopySigs(de_ctx, a->sh, &b->sh);
-
+#endif
         } else {
             AddressCutIPv6Copy(a_ip1, a->ip.addr_data32);
             AddressCutIPv6CopySubOne(b_ip1, a->ip2.addr_data32);
@@ -578,13 +578,13 @@ int DetectAddressCutIPv6(DetectEngineCtx *de_ctx, DetectAddress *a,
             AddressCutIPv6CopyAddOne(b_ip2, tmp_c->ip.addr_data32);
             AddressCutIPv6Copy(a_ip2, tmp_c->ip2.addr_data32);
             *c = tmp_c;
-
+#if 0
             /* 'a' stays the same wrt sigs
              * 'b' keeps it's own sigs and gets a's sigs prepended
              * 'c' gets 'a' sigs */
             SigGroupHeadCopySigs(de_ctx, a->sh, &b->sh);
             SigGroupHeadCopySigs(de_ctx, a->sh, &tmp_c->sh);
-
+#endif
         }
     }
 
