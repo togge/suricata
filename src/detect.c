@@ -3016,7 +3016,8 @@ static DetectPort *RulesGroupByPorts(DetectEngineCtx *de_ctx, int ipproto, uint3
             ((s->flags & (SIG_FLAG_TOSERVER|SIG_FLAG_TOCLIENT)) == (SIG_FLAG_TOSERVER|SIG_FLAG_TOCLIENT)) &&
             (!(s->dp->port == 0 && s->dp->port2 == 65535)))
         {
-            SCLogInfo("Rule %u: SYN-only to port %u:%u w/o direction specified, disabling for toclient",
+            SCLogWarning(SC_WARN_POOR_RULE, "rule %u: SYN-only to port(s) %u:%u "
+                    "w/o direction specified, disabling for toclient direction",
                     s->id, s->dp->port, s->dp->port2);
             goto next;
         }
