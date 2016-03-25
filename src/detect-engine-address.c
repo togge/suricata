@@ -82,10 +82,7 @@ void DetectAddressFree(DetectAddress *ag)
 
     SCLogDebug("ag %p, sh %p", ag, ag->sh);
 
-    /* only free the head if we have the original */
-    if (ag->sh != NULL && !(ag->flags & ADDRESS_SIGGROUPHEAD_COPY)) {
-        SCLogDebug("- ag %p, sh %p not a copy, so call SigGroupHeadFree", ag,
-                   ag->sh);
+    if (ag->sh != NULL) {
         SigGroupHeadFree(ag->sh);
     }
     ag->sh = NULL;
