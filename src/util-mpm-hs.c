@@ -46,7 +46,7 @@
 #include <hs.h>
 
 void SCHSInitCtx(MpmCtx *);
-void SCHSInitThreadCtx(MpmCtx *, MpmThreadCtx *, uint32_t);
+void SCHSInitThreadCtx(MpmCtx *, MpmThreadCtx *);
 void SCHSDestroyCtx(MpmCtx *);
 void SCHSDestroyThreadCtx(MpmCtx *, MpmThreadCtx *);
 int SCHSAddPatternCI(MpmCtx *, uint8_t *, uint16_t, uint16_t, uint16_t,
@@ -54,8 +54,8 @@ int SCHSAddPatternCI(MpmCtx *, uint8_t *, uint16_t, uint16_t, uint16_t,
 int SCHSAddPatternCS(MpmCtx *, uint8_t *, uint16_t, uint16_t, uint16_t,
                      uint32_t, SigIntId, uint8_t);
 int SCHSPreparePatterns(MpmCtx *mpm_ctx);
-uint32_t SCHSSearch(MpmCtx *mpm_ctx, MpmThreadCtx *mpm_thread_ctx,
-                    PatternMatcherQueue *pmq, uint8_t *buf, uint16_t buflen);
+uint32_t SCHSSearch(const MpmCtx *mpm_ctx, MpmThreadCtx *mpm_thread_ctx,
+                    PatternMatcherQueue *pmq, const uint8_t *buf, const uint16_t buflen);
 void SCHSPrintInfo(MpmCtx *mpm_ctx);
 void SCHSPrintSearchStats(MpmThreadCtx *mpm_thread_ctx);
 void SCHSRegisterTests(void);
@@ -763,8 +763,7 @@ error:
  * \param mpm_thread_ctx Pointer to the mpm thread context.
  * \param matchsize      We don't need this.
  */
-void SCHSInitThreadCtx(MpmCtx *mpm_ctx, MpmThreadCtx *mpm_thread_ctx,
-                       uint32_t matchsize)
+void SCHSInitThreadCtx(MpmCtx *mpm_ctx, MpmThreadCtx *mpm_thread_ctx)
 {
     memset(mpm_thread_ctx, 0, sizeof(MpmThreadCtx));
 
@@ -922,8 +921,6 @@ static int SCHSMatchEvent(unsigned int id, unsigned long long from,
                " (pat id=%" PRIu32 ")",
                cctx->match_count, (uint32_t)id, (uintmax_t)to, pat->id);
 
-    pmq->pattern_id_bitarray[pat->id / 8] |= (1 << (pat->id % 8));
-    MpmAddPid(pmq, pat->id);
     MpmAddSids(pmq, pat->sids, pat->sids_size);
 
     cctx->match_count++;
@@ -942,8 +939,8 @@ static int SCHSMatchEvent(unsigned int id, unsigned long long from,
  *
  * \retval matches Match count.
  */
-uint32_t SCHSSearch(MpmCtx *mpm_ctx, MpmThreadCtx *mpm_thread_ctx,
-                    PatternMatcherQueue *pmq, uint8_t *buf, uint16_t buflen)
+uint32_t SCHSSearch(const MpmCtx *mpm_ctx, MpmThreadCtx *mpm_thread_ctx,
+                    PatternMatcherQueue *pmq, const uint8_t *buf, const uint16_t buflen)
 {
     uint32_t ret = 0;
     SCHSCtx *ctx = (SCHSCtx *)mpm_ctx->ctx;
@@ -1061,7 +1058,6 @@ void SCHSPrintInfo(MpmCtx *mpm_ctx)
 void MpmHSRegister(void)
 {
     mpm_table[MPM_HS].name = "hs";
-    mpm_table[MPM_HS].max_pattern_length = 0;
 
     mpm_table[MPM_HS].InitCtx = SCHSInitCtx;
     mpm_table[MPM_HS].InitThreadCtx = SCHSInitThreadCtx;
