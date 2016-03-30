@@ -118,7 +118,7 @@ def TestRepoSync(branch):
     page = urllib2.urlopen(request)
     json_result = json.loads(page.read())
     sha_orig = json_result[0]["sha"]
-    request = urllib2.Request(GITHUB_BASE_URI + username + "/" + args.repository + "/commits?sha=" + branch + "&per_page=100")
+    request = urllib2.Request(GITHUB_BASE_URI + username + "/" + args.repository + "/commits?sha=" + branch + "&per_page=150")
     page = urllib2.urlopen(request)
     json_result = json.loads(page.read())
     found = -1
